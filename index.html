@@ -52,8 +52,6 @@
           ><a href="#innovation" class="whitespace-nowrap text-[13px] font-medium text-body transition-colors hover:text-ink">Innovation</a
           ><a href="#who" class="whitespace-nowrap text-[13px] font-medium text-body transition-colors hover:text-ink">Who It’s For</a
           ><a href="#market" class="whitespace-nowrap text-[13px] font-medium text-body transition-colors hover:text-ink">Market</a
-          ><a href="#founder" class="whitespace-nowrap text-[13px] font-medium text-body transition-colors hover:text-ink"
-            >About the Founder</a
           ><a href="#roadmap" class="whitespace-nowrap text-[13px] font-medium text-body transition-colors hover:text-ink">Roadmap</a>
         </nav>
         <div class="flex items-center gap-2">
@@ -96,7 +94,6 @@
           ><a href="#innovation" class="rounded px-2 py-2.5 text-[15px] font-medium text-ink hover:bg-paper">Innovation</a
           ><a href="#who" class="rounded px-2 py-2.5 text-[15px] font-medium text-ink hover:bg-paper">Who It’s For</a
           ><a href="#market" class="rounded px-2 py-2.5 text-[15px] font-medium text-ink hover:bg-paper">Market</a
-          ><a href="#founder" class="rounded px-2 py-2.5 text-[15px] font-medium text-ink hover:bg-paper">About the Founder</a
           ><a href="#roadmap" class="rounded px-2 py-2.5 text-[15px] font-medium text-ink hover:bg-paper">Roadmap</a
           ><a href="#contact" class="rounded px-2 py-2.5 text-[15px] font-medium text-ink hover:bg-paper">Contact</a
           ><a href="#contact" class="mt-2 rounded-md bg-ink px-4 py-3 text-center text-sm font-semibold text-white sm:hidden"
@@ -2252,6 +2249,8 @@
           </p>
         </div>
       </section>
+      <!-- Founder section temporarily hidden. To restore: remove the <template> wrapper below and re-add the "About the Founder" links in the desktop nav, mobile nav and footer nav. -->
+      <template id="founder-section-archived">
       <section id="founder" class="bg-paper border-t border-line py-20 sm:py-28">
         <div class="mx-auto w-full max-w-6xl px-5 sm:px-8">
           <header class="mb-12 max-w-3xl sm:mb-16" data-reveal="true">
@@ -2366,6 +2365,7 @@
           </div>
         </div>
       </section>
+      </template>
       <section id="model" class="bg-white border-t border-line py-20 sm:py-28">
         <div class="mx-auto w-full max-w-6xl px-5 sm:px-8">
           <header class="mb-12 max-w-3xl sm:mb-16" data-reveal="true">
@@ -2874,7 +2874,7 @@
               </div>
               <div class="flex gap-4">
                 <dt class="w-16 text-slate-500">Phone</dt>
-                <dd>[phone number to be added]</dd>
+                <dd><a href="tel:+447502731124" class="hover:text-white">+44 (0) 7502731124</a></dd>
               </div>
             </dl>
           </div>
@@ -2926,6 +2926,14 @@
                   required=""
                   autocomplete="email"
                   class="mt-1.5 w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink placeholder:text-slate-400 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30" /></label
+              ><label for="cf-country" class="text-sm font-semibold sm:col-span-2"
+                >Country / Location<input
+                  id="cf-country"
+                  name="country"
+                  autocomplete="country-name"
+                  maxlength="100"
+                  placeholder="Enter your country or location"
+                  class="mt-1.5 w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink placeholder:text-slate-400 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30" /></label
               ><label for="cf-pop" class="text-sm font-semibold sm:col-span-2"
                 >Supplier population<select
                   id="cf-pop"
@@ -2948,6 +2956,7 @@
                 ></textarea>
               </label>
             </div>
+            <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <button
               type="submit"
               class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-ink px-5 py-3.5 font-semibold text-white transition-colors hover:bg-teal"
@@ -3009,7 +3018,6 @@
               <li><a href="#innovation" class="hover:text-white">Innovation</a></li>
               <li><a href="#who" class="hover:text-white">Who It’s For</a></li>
               <li><a href="#market" class="hover:text-white">Market</a></li>
-              <li><a href="#founder" class="hover:text-white">About the Founder</a></li>
               <li><a href="#roadmap" class="hover:text-white">Roadmap</a></li>
               <li><a href="#contact" class="hover:text-white">Contact</a></li>
             </ul>

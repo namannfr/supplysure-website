@@ -32,13 +32,49 @@
   }
   rows.forEach(function (row, i) { row.addEventListener("click", function () { selectRow(i); }); });
 
-  // 3. Contact form (not connected to a server yet)
+  // 3. Contact form: posts to FormSubmit, which emails each enquiry to the inbox below.
+  // After FormSubmit activation you can swap the address for the random alias it emails you.
+  var FORM_ENDPOINT = "https://formsubmit.co/ajax/SupplySureSolutions@gmail.com";
   var form = document.getElementById("contact-form");
   if (form) {
+    var status = form.querySelector('[role="status"]');
+    var submit = form.querySelector('button[type="submit"]');
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      form.querySelector('[role="status"]').textContent =
-        "Thank you. This form is not yet connected to an inbox, so nothing has been sent. Connect a form endpoint before launch.";
+      var data = new FormData(form);
+      if (data.get("_honey")) return; // spam bot filled the hidden field
+      function val(name) { return String(data.get(name) || "").trim(); }
+      var payload = {
+        _subject: "New SupplySure enquiry from " + val("name"),
+        _template: "table",
+        _captcha: "false",
+        "Interested as": val("interest"),
+        "Name": val("name"),
+        "Organisation": val("organisation"),
+        "Role": val("role") || "Not provided",
+        "email": val("email"),
+        "Country / Location": val("country") || "Not provided",
+        "Supplier population": val("supplierPopulation") || "Not provided",
+        "Message": val("message") || "Not provided"
+      };
+      submit.disabled = true;
+      status.textContent = "Sending…";
+      fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) { return res.json().then(function (body) { return { ok: res.ok, body: body }; }); })
+        .then(function (r) {
+          if (!r.ok || String(r.body.success) !== "true") throw new Error(r.body.message || "Request failed");
+          form.reset();
+          status.textContent = "Thank you. Your enquiry has been sent and we will be in touch shortly.";
+        })
+        .catch(function () {
+          status.textContent =
+            "Sorry, your enquiry could not be sent. Please try again, or email SupplySureSolutions@gmail.com directly.";
+        })
+        .then(function () { submit.disabled = false; });
     });
   }
 
