@@ -64,13 +64,22 @@
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(payload)
       })
-        .then(function (res) { return res.json().then(function (body) { return { ok: res.ok, body: body }; }); })
+        // FormSubmit replies {"success":"true"} once the inbox is activated; anything else
+        // (activation pending, page opened as a local file, HTML error page) is a failure.
+        .then(function (res) {
+          return res.text().then(function (text) {
+            var body = {};
+            try { body = JSON.parse(text); } catch (err) { body = { message: "HTTP " + res.status + " (non-JSON response)" }; }
+            return { ok: res.ok, body: body };
+          });
+        })
         .then(function (r) {
           if (!r.ok || String(r.body.success) !== "true") throw new Error(r.body.message || "Request failed");
           form.reset();
           status.textContent = "Thank you. Your enquiry has been sent and we will be in touch shortly.";
         })
-        .catch(function () {
+        .catch(function (err) {
+          if (window.console) console.error("FormSubmit: " + err.message);
           status.textContent =
             "Sorry, your enquiry could not be sent. Please try again, or email SupplySureSolutions@gmail.com directly.";
         })
