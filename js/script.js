@@ -15,22 +15,35 @@
     nav.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", function () { setNav(false); }); });
   }
 
-  // 2. Dashboard: select a supplier row to show its "Why?" panel
-  var panel = document.getElementById("why-panel");
-  var rows = document.querySelectorAll("#demo tbody tr");
-  function selectRow(index) {
-    rows.forEach(function (row, i) {
-      var on = i === index;
-      row.classList.toggle("bg-teal-wash/60", on);
-      row.classList.toggle("hover:bg-paper", !on);
-      row.setAttribute("aria-selected", String(on));
-      var btn = row.querySelector("button");
-      if (btn) btn.setAttribute("aria-pressed", String(on));
+  // 1b. Header: hairline once scrolled, and highlight the section in view
+  var header = document.querySelector(".site-header");
+  function onScroll() { if (header) header.classList.toggle("scrolled", window.scrollY > 8); }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  var navLinks = document.querySelectorAll(".nav-desktop a");
+  if ("IntersectionObserver" in window && navLinks.length) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(function (a) { a.classList.toggle("is-active", a.getAttribute("href") === "#" + entry.target.id); });
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    ["home", "problem", "how-it-works", "demo", "who", "roadmap", "contact"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) spy.observe(el);
     });
+  }
+
+  // 2. Demo: select a supplier to show its "Why?" panel
+  var panel = document.getElementById("why-panel");
+  var suppliers = document.querySelectorAll("#demo .sup");
+  function selectSupplier(index) {
+    suppliers.forEach(function (btn, i) { btn.setAttribute("aria-pressed", String(i === index)); });
     var tpl = document.getElementById("why-" + index);
     if (panel && tpl) panel.innerHTML = tpl.innerHTML;
   }
-  rows.forEach(function (row, i) { row.addEventListener("click", function () { selectRow(i); }); });
+  suppliers.forEach(function (btn, i) { btn.addEventListener("click", function () { selectSupplier(i); }); });
+  if (suppliers.length) selectSupplier(1);
 
   // 3. Contact form: posts to FormSubmit, which emails each enquiry to the inbox below.
   // After FormSubmit activation you can swap the address for the random alias it emails you.
